@@ -9,7 +9,7 @@ import UIKit
 
 //презентер через протокол обращается к контроллеру
 protocol IMainViewController: AnyObject {
-    
+    func render(viewModel: ViewModel)
 }
 
 final class MainViewController: UIViewController {
@@ -20,57 +20,20 @@ final class MainViewController: UIViewController {
     private let buttonFirst = UIButton()
     private let buttonSecond = UIButton()
     private let buttonThird = UIButton()
-    private var currentImage: String = ""
-    private var buttonImagesName: [String] = []
-    
-    var labelText: String {
-        get {
-            label.text ?? ""
-        }
-        set {
-            label.text = newValue
-        }
-    }
-    
-    var image: String {
-        get {
-            currentImage
-        }
-        set {
-            currentImage = newValue
-        }
-    }
+    private var buttons: [UIButton] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray
         setup()
-        setupData()
+        presenter.getData()
         
     }
     
-    private func setupData() {
-        let data = presenter.getData()
-        buttonImagesName = data.image
-
-        labelText = data.name
-        
-        if buttonImagesName.count >= 3 {
-            buttonFirst.setImage(UIImage(named: buttonImagesName[0]), for: .normal)
-            buttonSecond.setImage(UIImage(named: buttonImagesName[1]), for: .normal)
-            buttonThird.setImage(UIImage(named: buttonImagesName[2]), for: .normal)
-        }
-    }
     
     @objc
     private func tapButton(_ sender: UIButton) {
-        
-        guard let selectedImage = sender.currentImage else {return}
-        let selectedImageName = buttonImagesName.first { UIImage(named: $0) == selectedImage} ?? ""
-        
-        print("Tap Button \(selectedImageName)")
-        
-        presenter?.tapImage(nameSelectedImage: selectedImageName, currentLabelText: labelText)
+        presenter.validate(index: sender.tag)
     }
 }
 
@@ -90,9 +53,14 @@ extension MainViewController {
         buttonFirst.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
         buttonSecond.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
         buttonThird.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
+        
+        buttonFirst.tag = 0
+        buttonSecond.tag = 1
+        buttonThird.tag = 2
     }
     
     func setupSubviews() {
+        buttons = [buttonFirst, buttonSecond, buttonThird]
         view.addSubview(label)
         view.addSubview(buttonFirst)
         view.addSubview(buttonSecond)
@@ -130,4 +98,13 @@ extension MainViewController {
 
 
 
-extension MainViewController: IMainViewController {}
+extension MainViewController: IMainViewController {
+    func render(viewModel: ViewModel) {
+        label.text = viewModel.name
+        
+        for (index, button) in buttons.enumerated() {
+            button.setImage(UIImage(named: viewModel.image[index]), for: .normal)
+        }
+        
+    }
+}

@@ -8,24 +8,29 @@
 import UIKit
 
 struct ViewModel {
+    let id: [Int]
     let name: String
-    let image: String
+    let image: [String]
 }
 
 protocol IMainPresenter {
-    
-    func getData() -> (image: [String], name: String)
-    
-    func tapImage(nameSelectedImage: String, currentLabelText: String)
+    func getData()
+    func validate(index: Int)
 }
 
 
 final class MainPresenter{
     
     weak var view: IMainViewController?
-    let router: IMainRouter
-    let repository: Repository
-    var counterScore = 0
+    private let router: IMainRouter
+    private let repository: IReposytory
+    
+    private var validItem: String = ""
+    private var items: [String] = []
+    private var idModels: [Int] = []
+    
+    private let selectedButton = Int()
+    private var counterScore = 0
     
     init(view: IMainViewController, router: IMainRouter, repository: Repository) {
         self.view = view
@@ -37,25 +42,25 @@ final class MainPresenter{
 
 extension MainPresenter: IMainPresenter {
     
-    func getData() -> (image: [String], name: String) {
-        let models = repository.getRandom(count: 3)
-        let images = models.map { $0.image }
-        let randomName = models.randomElement()?.nameCharacter ?? ""
-        return (images, randomName)
+    func getData() {
+        let randomData = repository.getRandom(count: 3)
+        let selectedData = randomData.randomElement()
+        
+        validItem  = selectedData?.nameCharacter ?? ""
+        items = randomData.map{ $0.image }
+        idModels = randomData.map{ $0.id }
+        
+        let viewModel = ViewModel(id: idModels, name: validItem, image: items)
+        view?.render(viewModel: viewModel)
     }
     
-    
-    func tapImage(nameSelectedImage: String, currentLabelText: String) {
-        
-        if nameSelectedImage == currentLabelText {
+    func validate(index: Int) {
+        let selectedButton = items[index]
+        if selectedButton == validItem {
             counterScore += 1
-            router.showAlert(message: "Верно, ваш счет \(counterScore)")
+            router.showAlert(message: "Правильно! Ваш счет \(counterScore)")
         } else {
-            router .showAlert(message: "Ошибка")
+            router.showAlert(message: "Ошибка!")
         }
     }
 }
-
-
-
-
