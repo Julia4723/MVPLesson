@@ -14,13 +14,13 @@ protocol IReposytory {
 
 final class Repository {
     private let characterList: [Character] = [
-        Character(id: 0, image: "Cat", nameCharacter: "Кот Матроскин"),
-        Character(id: 1, image: "Cheburashka", nameCharacter: "Чебурашка"),
-        Character(id: 2, image: "Dog", nameCharacter: "Шарик"),
-        Character(id: 3, image: "Fedor", nameCharacter: "Дядя Федор"),
-        Character(id: 4, image: "Gena", nameCharacter: "Крокодил Гена"),
-        Character(id: 5, image: "Pig", nameCharacter: "Пятачок"),
-        Character(id: 6, image: "ViniPuh", nameCharacter: "Винни Пух"),
+        Character(image: "Cat", nameCharacter: "Кот Матроскин"),
+        Character(image: "Cheburashka", nameCharacter: "Чебурашка"),
+        Character(image: "Dog", nameCharacter: "Шарик"),
+        Character(image: "Fedor", nameCharacter: "Дядя Федор"),
+        Character(image: "Gena", nameCharacter: "Крокодил Гена"),
+        Character(image: "Pig", nameCharacter: "Пятачок"),
+        Character(image: "ViniPuh", nameCharacter: "Винни Пух"),
     ]
 }
 

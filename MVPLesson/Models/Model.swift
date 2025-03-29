@@ -8,8 +8,6 @@
 import UIKit
 
 struct Character {
-    let id: Int
     let image: String
     let nameCharacter: String
-    
 }
