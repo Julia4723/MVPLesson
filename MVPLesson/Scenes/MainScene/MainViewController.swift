@@ -100,11 +100,10 @@ extension MainViewController {
 
 extension MainViewController: IMainViewController {
     func render(viewModel: ViewModel) {
-        label.text = viewModel.name
-        
+        label.text = "Выберите: \(viewModel.name)"
         for (index, button) in buttons.enumerated() {
-            button.setImage(UIImage(named: viewModel.image[index]), for: .normal)
+            let imageName = viewModel.image[index].image
+            button.setImage(UIImage(named: imageName), for: .normal)
         }
-        
     }
 }

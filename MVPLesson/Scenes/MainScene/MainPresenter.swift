@@ -8,9 +8,8 @@
 import UIKit
 
 struct ViewModel {
-    let id: [Int]
     let name: String
-    let image: [String]
+    let image: [Character]
 }
 
 protocol IMainPresenter {
@@ -26,8 +25,7 @@ final class MainPresenter{
     private let repository: IReposytory
     
     private var validItem: String = ""
-    private var items: [String] = []
-    private var idModels: [Int] = []
+    private var items: [Character] = []
     
     private let selectedButton = Int()
     private var counterScore = 0
@@ -46,17 +44,20 @@ extension MainPresenter: IMainPresenter {
         let randomData = repository.getRandom(count: 3)
         let selectedData = randomData.randomElement()
         
-        validItem  = selectedData?.nameCharacter ?? ""
-        items = randomData.map{ $0.image }
-        idModels = randomData.map{ $0.id }
+        validItem = selectedData?.nameCharacter ?? ""
+        items = randomData
         
-        let viewModel = ViewModel(id: idModels, name: validItem, image: items)
+        let viewModel = ViewModel(name: validItem, image: items)
         view?.render(viewModel: viewModel)
     }
     
     func validate(index: Int) {
-        let selectedButton = items[index]
-        if selectedButton == validItem {
+        let selectedCharacter = items[index]
+        
+        print("\(selectedCharacter.nameCharacter)")
+        print("\(validItem)")
+        
+        if selectedCharacter.nameCharacter == validItem {
             counterScore += 1
             router.showAlert(message: "Правильно! Ваш счет \(counterScore)")
         } else {
