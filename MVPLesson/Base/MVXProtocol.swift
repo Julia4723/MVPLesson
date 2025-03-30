@@ -14,4 +14,5 @@ protocol BaseAssembly {
 
 protocol BaseRouting {
     func showAlert(message: String)
+    func alertButtonTap(action: UIAlertAction)
 }

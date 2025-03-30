@@ -17,8 +17,7 @@ protocol IMainPresenter {
     func validate(index: Int)
 }
 
-
-final class MainPresenter{
+final class MainPresenter {
     
     weak var view: IMainViewController?
     private let router: IMainRouter
@@ -26,17 +25,15 @@ final class MainPresenter{
     
     private var validItem: String = ""
     private var items: [Character] = []
-    
-    private let selectedButton = Int()
     private var counterScore = 0
     
-    init(view: IMainViewController, router: IMainRouter, repository: Repository) {
+    init(view: IMainViewController, router: MainRouter, repository: Repository) {
         self.view = view
         self.router = router
         self.repository = repository
+        router.delegate = self
     }
 }
-
 
 extension MainPresenter: IMainPresenter {
     
@@ -54,14 +51,18 @@ extension MainPresenter: IMainPresenter {
     func validate(index: Int) {
         let selectedCharacter = items[index]
         
-        print("\(selectedCharacter.nameCharacter)")
-        print("\(validItem)")
-        
         if selectedCharacter.nameCharacter == validItem {
             counterScore += 1
             router.showAlert(message: "Правильно! Ваш счет \(counterScore)")
         } else {
             router.showAlert(message: "Ошибка!")
         }
+    }
+}
+
+
+extension MainPresenter: MainRouterDelegate {
+    func didDismissAler() {
+        getData()
     }
 }
