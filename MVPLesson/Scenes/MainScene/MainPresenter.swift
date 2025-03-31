@@ -15,6 +15,7 @@ struct ViewModel {
 protocol IMainPresenter {
     func getData()
     func validate(index: Int)
+    func getScore() -> Int
 }
 
 final class MainPresenter {
@@ -58,11 +59,15 @@ extension MainPresenter: IMainPresenter {
             router.showAlert(message: "Ошибка!")
         }
     }
+    
+    func getScore() -> Int {
+        counterScore
+    }
 }
 
 
 extension MainPresenter: MainRouterDelegate {
-    func didDismissAler() {
+    func didDismissAlert() {
         getData()
     }
 }

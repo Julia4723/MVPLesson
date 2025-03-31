@@ -17,6 +17,7 @@ final class MainViewController: UIViewController {
     var presenter: IMainPresenter!
     
     private let label = UILabel()
+    private var labelScore = UILabel()
     private let buttonFirst = UIButton()
     private let buttonSecond = UIButton()
     private let buttonThird = UIButton()
@@ -47,6 +48,7 @@ extension MainViewController {
     
     func setupLabel() {
         label.font = .systemFont(ofSize: 20, weight: .regular)
+        labelScore.font = .systemFont(ofSize: 20, weight: .regular)
     }
     
     func setupActions() {
@@ -62,6 +64,7 @@ extension MainViewController {
     func setupSubviews() {
         buttons = [buttonFirst, buttonSecond, buttonThird]
         view.addSubview(label)
+        view.addSubview(labelScore)
         view.addSubview(buttonFirst)
         view.addSubview(buttonSecond)
         view.addSubview(buttonThird)
@@ -69,6 +72,7 @@ extension MainViewController {
     
     func setupLayout() {
         label.translatesAutoresizingMaskIntoConstraints = false
+        labelScore.translatesAutoresizingMaskIntoConstraints = false
         buttonFirst.translatesAutoresizingMaskIntoConstraints = false
         buttonSecond.translatesAutoresizingMaskIntoConstraints = false
         buttonThird.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +81,10 @@ extension MainViewController {
             label.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            buttonFirst.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 20),
+            labelScore.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
+            labelScore.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            buttonFirst.topAnchor.constraint(equalTo: labelScore.bottomAnchor, constant: 20),
             buttonFirst.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttonFirst.heightAnchor.constraint(equalToConstant: 100),
             buttonFirst.widthAnchor.constraint(equalToConstant: 100),
@@ -101,6 +108,8 @@ extension MainViewController {
 extension MainViewController: IMainViewController {
     func render(viewModel: ViewModel) {
         label.text = "Выберите: \(viewModel.name)"
+        labelScore.text = presenter.getScore().formatted()
+        
         for (index, button) in buttons.enumerated() {
             let imageName = viewModel.image[index].image
             button.setImage(UIImage(named: imageName), for: .normal)
